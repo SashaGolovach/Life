@@ -20,8 +20,8 @@ namespace Life.Services
         public List<User> Get() =>
             _usersDatabase.Find(book => true).ToList();
 
-        public User Get(string id) =>
-            _usersDatabase.Find<User>(book => book.id == id).FirstOrDefault();
+        public User Get(string username) =>
+            _usersDatabase.Find<User>(user => user.Username == username).FirstOrDefault();
 
         public User Create(User book)
         {

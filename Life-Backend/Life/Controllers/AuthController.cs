@@ -15,34 +15,49 @@ using Microsoft.IdentityModel.Tokens;
 namespace Life.Controllers
 {
     [Route("auth")]
+    [Authorize]
     public class AuthController
     {
         private IAuthService _authService;
-        private UsersService _usersService;
+        private AppSettings _appSettings;
 
-        public AuthController(IAuthService authService, UsersService usersService)
+        public AuthController(IAuthService authService, AppSettings appSettings)
         {
             _authService = authService;
-            _usersService = usersService;
+            _appSettings = appSettings;
         }
         
-        [HttpPost("user")]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateUser([FromBody]User user)
+        [HttpGet("")]
+        public IActionResult AuthGet()
         {
-            _usersService.Create(user);
-            return new OkResult();
+            return new JsonResult("it works");
         }
-        
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody]LoginModel loginModel)
         {
-            var user = _authService.Authenticate(loginModel.Username, loginModel.Password);
+            var user = await _authService.Authenticate(loginModel.Username, loginModel.Password);
 
             if (user == null)
                 return new BadRequestResult();
-
-            return new JsonResult(user);
+            
+            // authentication successful so generate jwt token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[] 
+                {
+                    new Claim(ClaimTypes.Name, user.id)
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var response = new LoginResponseModel();
+            response.Token = tokenHandler.WriteToken(token);
+            return new JsonResult(response);
         }
 
         [AllowAnonymous]
