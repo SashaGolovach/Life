@@ -1,18 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Life.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace Life_Backend
+namespace Life
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            string json = File.ReadAllText(@"appsettings.json");
+            JObject o = JObject.Parse(@json);
+            AppSettings.appSettings = JsonConvert.DeserializeObject<AppSettings>(o["AppSettings"].ToString());
             CreateHostBuilder(args).Build().Run();
         }
 

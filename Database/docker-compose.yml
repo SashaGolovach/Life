@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  db:
+    image: 'mongo'
+    restart: always
+    container_name: 'your-coach-mongo-container'
+    ports:
+        - '27017-27019:27017-27019'
+    volumes:
+        - my-db:/data/db
+# Names our volume
+volumes:
+  my-db:

@@ -1,6 +1,6 @@
 using System;
 
-namespace Life_Backend
+namespace Life
 {
     public class WeatherForecast
     {

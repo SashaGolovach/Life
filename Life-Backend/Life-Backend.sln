@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Life-Backend", "Life-Backend\Life-Backend.csproj", "{0EDD22F3-F730-4D9C-93C0-F827C5C3FCE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Life", "Life\Life.csproj", "{0EDD22F3-F730-4D9C-93C0-F827C5C3FCE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
