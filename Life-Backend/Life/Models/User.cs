@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Life.Models
@@ -7,11 +8,11 @@ namespace Life.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string id {get; set;}
-        public string name {get; set;}
-        public string email {get; set;}
-        public string oauthSubject {get; set;}
-        public string oauthIssuer {get; set;}
+        public string Id {get; set;}
+        public string FirstName {get; set;}
+        public string LastName {get; set;}
+        public string Email { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Password { get; set; }
         public string Username { get; set; }
     }

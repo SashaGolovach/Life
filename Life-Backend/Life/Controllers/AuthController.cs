@@ -42,6 +42,13 @@ namespace Life.Controllers
             if (user == null)
                 return new BadRequestResult();
             
+            var response = new LoginResponseModel();
+            response.Token = CreateToken(user.Id);
+            return new JsonResult(response);
+        }
+
+        private string CreateToken(string userId)
+        {
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
@@ -49,15 +56,13 @@ namespace Life.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[] 
                 {
-                    new Claim(ClaimTypes.Name, user.id)
+                    new Claim(ClaimTypes.Name, userId)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            var response = new LoginResponseModel();
-            response.Token = tokenHandler.WriteToken(token);
-            return new JsonResult(response);
+            return tokenHandler.WriteToken(token);
         }
 
         [AllowAnonymous]
@@ -68,22 +73,9 @@ namespace Life.Controllers
             {
                 var payload = GoogleJsonWebSignature.ValidateAsync(userView.tokenId, new GoogleJsonWebSignature.ValidationSettings()).Result;
                 var user = await _authService.Authenticate(payload);
-
-                // var claims = new[]
-                // {
-                //     new Claim(JwtRegisteredClaimNames.Sub, Security.Encrypt(AppSettings.appSettings.JwtEmailEncryption,user.email)),
-                //     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                // };
-
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AppSettings.appSettings.JwtSecret));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(String.Empty,
-                    String.Empty,
-                    new List<Claim>(),
-                    expires: DateTime.Now.AddSeconds(55*60),
-                    signingCredentials: creds);
-                return new OkResult();
+                var response = new LoginResponseModel();
+                response.Token = CreateToken(user.Id);
+                return new JsonResult(response);
             }
             catch (Exception ex)
             {

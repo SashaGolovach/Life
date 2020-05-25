@@ -30,12 +30,12 @@ namespace Life.Services
         }
 
         public void Update(string id, User bookIn) =>
-            _usersDatabase.ReplaceOne(book => book.id == id, bookIn);
+            _usersDatabase.ReplaceOne(book => book.Id == id, bookIn);
 
         public void Remove(User bookIn) =>
-            _usersDatabase.DeleteOne(book => book.id == bookIn.id);
+            _usersDatabase.DeleteOne(book => book.Id == bookIn.Id);
 
         public void Remove(string id) =>
-            _usersDatabase.DeleteOne(book => book.id == id);
+            _usersDatabase.DeleteOne(book => book.Id == id);
     }
 }

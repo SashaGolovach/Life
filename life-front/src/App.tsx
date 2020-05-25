@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
 import GoogleLogin from 'react-google-login';
+import {authenticationService} from "./services/authentication.service";
 
 const About = () => (
     <div><h1>About</h1></div>
@@ -11,7 +12,7 @@ const NotFound = () => (
 )
 
 const responseGoogle = (response : any) => {
-    console.log(response);
+    authenticationService.loginByGoogle(response.tokenId);
 }
 
 class App extends Component {

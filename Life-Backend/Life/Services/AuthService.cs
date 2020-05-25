@@ -18,6 +18,14 @@ namespace Life.Services
         public async Task<User> Authenticate(Google.Apis.Auth.GoogleJsonWebSignature.Payload payload)
         {            
             var user = _usersService.Get(payload.Email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    Email = payload.Email
+                };
+                _usersService.Create(user);
+            }
             return user;
         }
         
