@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch } from "react-router-dom";
-import GoogleLogin from 'react-google-login';
+//import GoogleLogin from 'react-google-login';
 import {authenticationService} from "./services/authentication.service";
+import { Button } from 'element-react';
+
 
 const About = () => (
     <div><h1>About</h1></div>
@@ -18,13 +19,14 @@ const responseGoogle = (response : any) => {
 class App extends Component {
     render() {
         return (
-            <GoogleLogin
-                clientId="848128067202-2p8b2tv3tfgp2o8d2psrocr4qsb8j87h.apps.googleusercontent.com"
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-            />
+            <Button type="primary">Hello</Button>
+            // <GoogleLogin
+            //     clientId="848128067202-2p8b2tv3tfgp2o8d2psrocr4qsb8j87h.apps.googleusercontent.com"
+            //     buttonText="Login"
+            //     onSuccess={responseGoogle}
+            //     onFailure={responseGoogle}
+            //     cookiePolicy={'single_host_origin'}
+            // />
         );
     }
 }
